@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Address Link Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://www.pexels.com/photo/blue-and-white-world-map-illustration-1051075/');
+            background-size: cover;
+            background-position: center;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        h1 {
+            color: #4682b4;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 8px;
+        }
+        form {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #4682b4;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #5a9bd4;
+        }
+        #links p {
+            margin: 5px 0;
+        }
+        #links a {
+            color: #4682b4;
+            text-decoration: none;
+        }
+        #links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Address Link Generator</h1>
+    <form id="addressForm">
+        <label for="customer">Enter Customer Name (optional):</label>
+        <input type="text" id="customer" name="customer">
+        <br>
+        <label for="address">Enter Address:</label>
+        <input type="text" id="address" name="address" required>
+        <br>
+        <button type="submit">Generate Links</button>
+    </form>
+    <div id="links"></div>
+
+    <script>
+        document.getElementById('addressForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            generateLinks();
+        });
+
+        function generateLinks() {
+            const customer = encodeURIComponent(document.getElementById('customer').value);
+            const address = encodeURIComponent(document.getElementById('address').value);
+            const googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${address}`;
+            const bingMapsLink = `https://www.bing.com/maps?q=${address}`;
+            const duckDuckGoMapsLink = `https://duckduckgo.com/?q=${address}&ia=maps`;
+            const googleSearchLink = customer ? `https://www.google.com/search?q=${customer}+${address}` : `https://www.google.com/search?q=${address}`;
+            const bingSearchLink = customer ? `https://www.bing.com/search?q=${customer}+${address}` : `https://www.bing.com/search?q=${address}`;
+            const copilotSearchLink = customer ? `https://www.bing.com/search?q=${customer}+${address}&form=QBLH` : `https://www.bing.com/search?q=${address}&form=QBLH`;
+            const geminiSearchLink = customer ? `https://www.gemini.com/search?q=${customer}+${address}` : `https://www.gemini.com/search?q=${address}`;
+
+            document.getElementById('links').innerHTML = `
+                <p><a href="${googleMapsLink}" target="_blank">Google Maps</a></p>
+                <p><a href="${bingMapsLink}" target="_blank">Bing Maps</a></p>
+                <p><a href="${duckDuckGoMapsLink}" target="_blank">DuckDuckGo Maps</a></p>
+                <p><a href="${googleSearchLink}" target="_blank">Google Search</a></p>
+                <p><a href="${bingSearchLink}" target="_blank">Bing Search</a></p>
+                <p><a href="${copilotSearchLink}" target="_blank">Copilot Search</a></p>
+                <p><a href="${geminiSearchLink}" target="_blank">Gemini Search</a></p>
+            `;
+        }
+
+        // Check if URL has query parameters and pre-fill the form
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const customer = urlParams.get('customer');
+            const address = urlParams.get('address');
+            if (customer) document.getElementById('customer').value = decodeURIComponent(customer);
+            if (address) document.getElementById('address').value = decodeURIComponent(address);
+            if (address) generateLinks();
+        };
+    </script>
+</body>
+</html>

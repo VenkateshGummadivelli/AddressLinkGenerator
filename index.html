@@ -68,8 +68,8 @@
 <body>
     <h1>Address Link Generator</h1>
     <form id="addressForm">
-        <label for="customer">Enter Customer Name:</label>
-        <input type="text" id="customer" name="customer" required>
+        <label for="customer">Enter Customer Name (optional):</label>
+        <input type="text" id="customer" name="customer">
         <br>
         <label for="address">Enter Address:</label>
         <input type="text" id="address" name="address" required>
@@ -90,10 +90,10 @@
             const googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${address}`;
             const bingMapsLink = `https://www.bing.com/maps?q=${address}`;
             const duckDuckGoMapsLink = `https://duckduckgo.com/?q=${address}&ia=maps`;
-            const googleSearchLink = `https://www.google.com/search?q=${customer}+${address}`;
-            const bingSearchLink = `https://www.bing.com/search?q=${customer}+${address}`;
-            const copilotSearchLink = `https://www.bing.com/search?q=${customer}+${address}&form=QBLH`;
-            const geminiSearchLink = `https://www.gemini.com/search?q=${customer}+${address}`;
+            const googleSearchLink = customer ? `https://www.google.com/search?q=${customer}+${address}` : `https://www.google.com/search?q=${address}`;
+            const bingSearchLink = customer ? `https://www.bing.com/search?q=${customer}+${address}` : `https://www.bing.com/search?q=${address}`;
+            const copilotSearchLink = customer ? `https://www.bing.com/search?q=${customer}+${address}&form=QBLH` : `https://www.bing.com/search?q=${address}&form=QBLH`;
+            const geminiSearchLink = customer ? `https://www.gemini.com/search?q=${customer}+${address}` : `https://www.gemini.com/search?q=${address}`;
 
             document.getElementById('links').innerHTML = `
                 <p><a href="${googleMapsLink}" target="_blank">Google Maps</a></p>
@@ -113,7 +113,7 @@
             const address = urlParams.get('address');
             if (customer) document.getElementById('customer').value = decodeURIComponent(customer);
             if (address) document.getElementById('address').value = decodeURIComponent(address);
-            if (customer && address) generateLinks();
+            if (address) generateLinks();
         };
     </script>
 </body>
